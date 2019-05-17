@@ -1,6 +1,6 @@
 ---
 
-- name: deploy vms
+- name: Deploy vms
   hosts:
     - rhvm
   gather_facts: true
