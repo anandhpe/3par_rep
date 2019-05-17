@@ -1,0 +1,123 @@
+###
+## Copyright (2018) Hewlett Packard Enterprise Development LP
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## You may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+## http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+####
+
+[rhv]
+aprhvh01.tennet.local  
+  
+
+[rhvm]
+aovirtpar.tennet.local
+
+[3workerhosts]
+apworker01.tennet.local team1ip=20.0.141.131
+apworker02.tennet.local team1ip=20.0.141.132
+apworker03.tennet.local tean1ip=20.0.141.133
+
+
+[3rhvh]
+192.168.3.174 fqdn=aprhvh01.tennet.local bondip1=10.0.141.7 bondip2=20.0.141.7 name=aprhvh01 
+ 
+
+[virtual-nodes]
+apmaster01.tennet.local       
+apmaster02.tennet.local       
+apmaster03.tennet.local
+apetcd01.tennet.local
+apetcd02.tennet.local
+apetcd03.tennet.local
+apinfra01.tennet.local
+apinfra02.tennet.local
+apinfra03.tennet.local
+aplb01.tennet.local
+aplb02.tennet.local
+apworker01.tennet.local
+apworker02.tennet.local
+apworker03.tennet.local
+
+#[physical-nodes]
+#3worker01.tennet.local
+#3worker02.tennet.local
+#3worker03.tennet.local
+#3worker04.tennet.local
+#3worker05.tennet.local
+
+
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+infra
+
+[OSEv3:vars]
+ansible_ssh_user=oshiftuser
+ansible_become=true
+openshift_release="3.11"
+openshift_deployment_type=openshift-enterprise
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login':'true', 'challenge': 'true','kind': 'HTPasswdPasswordIdentityProvider',}]
+openshift_master_htpasswd_file=/etc/oshift-hash-pass.htpasswd
+public_hosted_zone=tennet.local
+load_balancer_hostname=aplb01.tennet.local
+openshift_master_cluster_hostname=aplb01.tennet.local
+openshift_master_cluster_public_hostname=aplb01.tennet.local
+openshift_public_hostname=aplb01.tennet.local
+openshift_install_examples=false
+openshift_master_cluster_method=native
+openshift_use_openshift_sdn=true
+osm_cluster_network_cidr=14.0.0.0/8
+osm_host_subnet_length=9
+openshift_registry_selector='node-role.kubernetes.io/compute=true'
+openshift_router_selector='node-role.kubernetes.io/infra=true'
+openshift_enable_service_catalog=False
+openshift_disable_check=docker_image_availability
+openshift_master_bootstrap_auto_approve=True
+oreg_auth_user="anandhpe"
+oreg_auth_password="FORget@123"
+oreg_url="registry.access.redhat.com/openshift3/ose-${component}:${version}"
+oreg_test_login=false
+
+[masters]
+apmaster01.tennet.local
+apmaster02.tennet.local
+apmaster03.tennet.local
+
+[etcd]
+apetcd01.tennet.local
+apetcd02.tennet.local
+apetcd03.tennet.local
+
+[lb]
+aplb01.tennet.local
+aplb02.tennet.local
+
+[infra]
+apinfra01.tennet.local
+apinfra02.tennet.local
+apinfra03.tennet.local
+
+[nodes]
+apmaster01.tennet.local openshift_node_group_name='node-config-master' 
+apmaster02.tennet.local openshift_node_group_name='node-config-master' 
+apmaster03.tennet.local openshift_node_group_name='node-config-master' 
+apinfra01.tennet.local openshift_node_group_name='node-config-infra'
+apinfra02.tennet.local openshift_node_group_name='node-config-infra'
+apinfra03.tennet.local openshift_node_group_name='node-config-infra'
+apworker01.tennet.local openshift_node_group_name='node-config-compute'
+apworker02.tennet.local openshift_node_group_name='node-config-compute'
+apworker03.tennet.local openshift_node_group_name='node-config-compute'
+#3worker04.tennet.local openshift_node_group_name='node-config-compute'
+#3worker05.tennet.local openshift_node_group_name='node-config-compute'
+
